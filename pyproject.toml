@@ -1,0 +1,14 @@
+[project]
+name = "cflow"
+version = "0.1.0"
+description = "Machine First Functional Graph Workflow Builder"
+author="James Ott"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "openai>=1.95.1",
+    "openai-agents>=0.1.0",
+    "pandas>=2.3.1",
+    "pydantic>=2.11.7",
+    "python-dotenv>=1.1.1",
+]
