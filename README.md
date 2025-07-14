@@ -252,3 +252,10 @@ Contributions / Feedback welcome!
 ## Examples
 
 Check out the `examples/` directory for more complex workflow patterns.
+
+## Other
+### Acknowledgments
+Class based Mutable Graph Library, served as the insporation for the initial rules file(s) and internal method flow:
+
+- [Pocketflow](https://github.com/The-Pocket/PocketFlow) [MIT] by [
+zachary62].
