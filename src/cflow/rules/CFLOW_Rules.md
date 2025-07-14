@@ -1,11 +1,11 @@
-# Function Flow: Functional Programming for LLM Systems
+# CFlow: Functional Programming for LLM Systems
 
-> If you are an AI agent building LLM systems with Function Flow, read this guide **VERY, VERY** carefully! This is your essential reference for functional LLM development. Always (1) start with pure functions, (2) design state fields first, and (3) compose small functions into larger workflows.
+> If you are an AI agent building systems with CFlow, read this guide **VERY** carefully and step-by-step! This is your essential reference for functional Graph development. Always (1) start with pure functions, (2) design state fields first, and (3) compose small functions into larger workflows.
 {: .warning }
 
-## Function Flow Philosophy
+## CFlow Philosophy
 
-Function Flow applies **functional programming principles** to LLM system graph design:
+CFlow applies **functional programming-like principles** to system graph design:
 
 - **Pure Functions**: Each node is a pure function that takes state and returns state
 - **Automatic Immutability**: Framework handles deep copying - you just modify and return state
@@ -67,7 +67,7 @@ class ProcessingState(BaseModel):
     results: dict = {}
 ```
 
-## Function Flow Steps
+## CFlow Steps
 
 | Step | Responsibility | Best Practice |
 |:-----|:--------------|:-------------|
@@ -459,7 +459,8 @@ analyze_node = Node(analyze_content)
 retry_node = Node(retry_analysis)
 summary_node = Node(generate_summary)
 
-# Build flow with retry logic
+# Build flow with retry logic.
+#* Conditionals Format: Node - (key_string, Value) >> next Node
 extract_node >> analyze_node
 analyze_node - ("should_retry", True) >> retry_node
 analyze_node - ("should_retry", False) >> summary_node

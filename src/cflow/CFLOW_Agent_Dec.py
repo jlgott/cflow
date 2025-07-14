@@ -1,6 +1,5 @@
 import asyncio
 import functools
-import time
 from typing import Any, Dict, List, Optional, Union  # noqa: F401
 
 from agents import (  # noqa: F401
@@ -14,7 +13,7 @@ from agents import (  # noqa: F401
 from dotenv import load_dotenv
 from pydantic import BaseModel, Field  # noqa: F401
 
-from CFLOW import Flow, Node, ParallelNode  # noqa: F401
+from cflow import Flow, Node, ParallelNode  # noqa: F401
 
 load_dotenv()
 set_default_openai_api("chat_completions")
@@ -22,7 +21,7 @@ set_default_openai_api("chat_completions")
 
 """
 NOTES: 
-# TODO Need to figure out a way for ContextInjection here.  UserContext and RunContextWrapper for OpenAI Agent Class.
+# TODO Need to figure out an easy way for ContextInjection here.  UserContext and RunContextWrapper for OpenAI Agent Class.
 
 """
 
@@ -40,9 +39,9 @@ def call_LLM(
     system_prompt: str = "",
     output_type: Union[BaseModel, Dict[str, Any]] = None,
     tools=[],
-    timeout: int = 30,
-    max_turns: int = 3,
-    max_concurrent:int = 5,
+    timeout: int = 30,  # async timeout
+    max_turns: int = 3,  # openai Agent limiter
+    max_concurrent:int = 5,  # semaphore
     tracing_disabled: bool = False
     ):
     def fn_decorator(user_func):
@@ -95,7 +94,7 @@ def call_LLM(
                 return state
 
             async def finish(state: LLMState):
-                print(f"State from Finish: {state}")
+                # print(f"State from Finish: {state}") #* UNCOMMENT FOR DEBUGGING
                 return state
 
             # Create nodes
@@ -122,51 +121,3 @@ def call_LLM(
         return wrapper
 
     return fn_decorator
-
-
-# Example usage
-if __name__ == "__main__":
-    print("\n")
-
-    class DemoOutput(BaseModel):
-        model_output:str
-
-
-    async def sequential_example():
-        ss = time.time()
-
-        @call_LLM(system_prompt="Be helpful and brief", name="seq1")
-        def single_query():
-            return "What is the capital of France?"
-
-        @call_LLM(system_prompt="Be helpful and brief", name="seq2", output_type=DemoOutput)
-        def single_query2():
-            return "What is the capital of Spain?"
-
-        result1 = await single_query()
-        result2 = await single_query2()
-        print(f"Sequential Time: {time.time() - ss:.3f}")
-        print(f"Results: {result1}, {result2}")
-        print(f"Result1 type: {type(result1)}")
-        print(f"Result2 type: {type(result2)}")
-
-
-
-    async def parallel_example():
-        sp = time.time()
-
-        @call_LLM(system_prompt="Be helpful and brief", name="parallel_test", output_type=DemoOutput)
-        def multiple_queries():
-            return ["What is the capital of France?", "What is the capital of Spain?"]
-
-        result = await multiple_queries()
-        print(f"Parallel Time: {time.time() - sp:.3f}")
-        print(f"Results: {result}")
-
-
-    async def test():
-        await sequential_example()
-        print("\n\n")
-        await parallel_example()
-
-    asyncio.run(test())

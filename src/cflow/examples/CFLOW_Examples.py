@@ -1,6 +1,6 @@
 #CFLOW_Examples
 
-from CFLOW import Node, Flow  # noqa: F401
+from cflow import Node, Flow  # noqa: F401
 from pydantic import BaseModel, Field  # noqa: F401
 import asyncio
 

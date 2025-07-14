@@ -1,4 +1,4 @@
-from CFLOW import Flow, Node, ParallelNode  # noqa: F401
+from cflow import Flow, Node, ParallelNode  # noqa: F401
 from pydantic import BaseModel, Field  # noqa: F401
 import asyncio
 import random  # noqa: F401
